@@ -1,9 +1,11 @@
-'use strict';
 import { test, expect, Locator } from '@playwright/test';
 import { LoginPage } from '../page-objects/loginPage';
 import { ToolsPage } from '../page-objects/toolsPage';
-import { FormApplicationsPage } from '../page-objects/forms&applicationsPage';
+import { FormApplicationsPage } from '../page-objects/formsPage';
 import { BecomeClient } from '../page-objects/becomeClient';
+import { InboxPage } from '../page-objects/inboxPage';
+import { DashboardPage } from '../page-objects/dashboardPage';
+
 test.describe('suite', async () => {
     test('create portfolio', async ({ page }) => {
         const login = new LoginPage(page);
@@ -20,10 +22,7 @@ test.describe('suite', async () => {
     test('invalid sign in', async ({ page }) => {
         const loginPage = new LoginPage(page);
         await loginPage.goto();
-        await loginPage.signInButton.click();
-        await (loginPage.emailField.fill('loki'));
-        await (loginPage.passwordField.fill('Qwerty1'));
-        await (loginPage.logInButton.click());
+        await loginPage.loggedUser('loki', 'Qwerty1')
         await expect(loginPage.logInError).toBeVisible();
     });
 
@@ -37,6 +36,7 @@ test.describe('suite', async () => {
         await (formAplicationsPage.searchButton.click());
         await expect(formAplicationsPage.applicationResult).toBeVisible();
     });
+
     test('check open an account link', async ({ page }) => {
         const loginPage = new LoginPage(page);
         const becomeClient = new BecomeClient(page);
@@ -46,6 +46,7 @@ test.describe('suite', async () => {
         await page.mouse.up();
         await expect(becomeClient.becomeClientText).toBeVisible();
     })
+
     test('invalid search form & applications', async ({ page }) => {
         const loginPage = new LoginPage(page);
         const formAplicationsPage = new FormApplicationsPage(page);
@@ -57,8 +58,6 @@ test.describe('suite', async () => {
         await expect(formAplicationsPage.searchError).toBeVisible();
     })
 
-
-
     test('creating a profile for RRSP account by using invalid email', async ({ page }) => {
         const loginPage = new LoginPage(page);
         const becomeClient = new BecomeClient(page);
@@ -68,6 +67,7 @@ test.describe('suite', async () => {
         await becomeClient.rrspEmailAddressField.pressSequentially('test');
         await expect(becomeClient.errorEmailField).toBeVisible();
     })
+
     test('creating a profile for TFSA account by using invalid email', async ({ page }) => {
         const loginPage = new LoginPage(page);
         const becomeClient = new BecomeClient(page);
@@ -77,6 +77,7 @@ test.describe('suite', async () => {
         await becomeClient.tfsaEmailAddressField.pressSequentially('thhgt');
         await expect(becomeClient.errorEmailField).toBeVisible();
     })
+
     test('creating a profile for Non-Registered Investment Account by using invalid email', async ({ page }) => {
         const loginPage = new LoginPage(page);
         const becomeClient = new BecomeClient(page);
@@ -86,4 +87,46 @@ test.describe('suite', async () => {
         await becomeClient.iaEmailAddressField.pressSequentially('thhghg');
         await expect(becomeClient.errorEmailField).toBeVisible();
     })
-})
+
+    test('check a body message', async ({ page }) => {
+        test.setTimeout(150000);
+        const loginPage = new LoginPage(page);
+        const inboxPage = new InboxPage(page);
+        const dashboardPage = new DashboardPage(page);
+        await loginPage.goto();
+        await loginPage.loggedUser('loki', 'Qwerty1!');
+        await expect(loginPage.dashboardHeader).toBeVisible({ timeout: 100000 });
+        await inboxPage.inboxlink.click();
+        await inboxPage.messageTitle.click();
+        await expect(inboxPage.expiryDate).toBeVisible();
+        await inboxPage.messageTitle.click();
+        await expect(inboxPage.expiryDate).toBeHidden();
+    });
+
+    test('check a body message Fr', async ({ page }) => {
+        test.setTimeout(150000);
+        const loginPage = new LoginPage(page);
+        const inboxPage = new InboxPage(page);
+        await loginPage.goto();
+        await loginPage.loggedUserFr('loki', 'Qwerty1!');
+        await expect(loginPage.dashboardHeaderFr).toBeVisible({ timeout: 100000 });
+        await inboxPage.inboxlinkFr.click();
+        await inboxPage.messageTitleFr.click();
+        await expect(inboxPage.expiryDateFr).toBeVisible();
+        await inboxPage.messageTitleFr.click();
+        await expect(inboxPage.expiryDateFr).toBeHidden();
+    });
+
+    test('check selecting messages Fr', async ({ page }) => {
+        test.setTimeout(150000);
+        const loginPage = new LoginPage(page);
+        const inboxPage = new InboxPage(page);
+        await loginPage.goto();
+        await loginPage.loggedUserFr('loki', 'Qwerty1!');
+        await expect(loginPage.dashboardHeaderFr).toBeVisible({ timeout: 100000 });
+        await inboxPage.inboxlinkFr.click();
+        await inboxPage.selectChecks.click();
+        await inboxPage.clearChecks.click();
+        await inboxPage.deleteSelectedFr.isDisabled();
+    });
+});
