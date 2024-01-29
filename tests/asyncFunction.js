@@ -27,7 +27,6 @@ async function count(anyString) {
      } else {
           return anyString.length;
      }
-
 }
 
 count("cool").then((result) => {
