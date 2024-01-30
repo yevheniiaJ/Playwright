@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
+
 export class BecomeClient {
     readonly page: Page;
     readonly becomeClientText: Locator;
@@ -11,9 +12,6 @@ export class BecomeClient {
     readonly tfsaOpenTransferButton: Locator;
     readonly iaOpenTransferButton: Locator;
 
-
-
-
     constructor(page: Page) {
         this.page = page;
         this.becomeClientText = page.locator(`//h1[contains (text(), 'Become a Client')]`);
@@ -25,6 +23,5 @@ export class BecomeClient {
         this.errorEmailField = page.locator(`//span[@class='form-icon']`);
         this.tfsaOpenTransferButton = page.locator(`//a[@id='openTFSA']`);
         this.iaOpenTransferButton = page.locator(`//a[@id='openIA']`);
-
     }
 }
