@@ -11,6 +11,8 @@ export class InboxPage {
     readonly selectChecks: Locator;
     readonly clearChecks: Locator;
     readonly deleteSelectedFr: Locator;
+    readonly inboxHeader: Locator;
+    readonly inboxHeaderFr: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -23,5 +25,7 @@ export class InboxPage {
         this.selectChecks = page.locator(`//a[@id='selectChecks']`);
         this.clearChecks = page.locator(`//a[@id='clearChecks']`);
         this.deleteSelectedFr = page.locator(`//button[contains(text(), 'Supprimer ce qui a été sélectionné')]`);
+        this.inboxHeader = page.locator(`//h1[contains(text(), 'Inbox')]`)
+        this.inboxHeaderFr = page.locator(`//h1[contains(text(), 'Mon centre de messagerie')]`);
     }
 }

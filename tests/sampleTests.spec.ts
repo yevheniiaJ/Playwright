@@ -5,7 +5,8 @@ import { FormApplicationsPage } from '../page-objects/formsPage';
 import { BecomeClient } from '../page-objects/becomeClient';
 import { InboxPage } from '../page-objects/inboxPage';
 import { DashboardPage } from '../page-objects/dashboardPage';
-
+import { GoalsPage } from '../page-objects/goalsPage';
+ 
 test.describe('suite', async () => {
     test('create portfolio', async ({ page }) => {
         const login = new LoginPage(page);
@@ -129,4 +130,47 @@ test.describe('suite', async () => {
         await inboxPage.clearChecks.click();
         await inboxPage.deleteSelectedFr.isDisabled();
     });
+
+    test('view all messages', async ({ page }) => {
+        test.setTimeout(150000);
+        const loginPage = new LoginPage(page);
+        const inboxPage = new InboxPage(page);
+        const dashboardPage = new DashboardPage(page);
+        await loginPage.goto();
+        await loginPage.loggedUser('loki', 'Qwerty1!');
+        await expect(loginPage.dashboardHeader).toBeVisible({ timeout: 100000 });
+        await page.mouse.move(10,5);
+        await dashboardPage.viewAllMessagesButton.click();
+        await expect(inboxPage.inboxHeader).toBeVisible();
+    });
+
+    test('view all messages Fr', async ({ page }) => {
+        test.setTimeout(150000);
+        const loginPage = new LoginPage(page);
+        const inboxPage = new InboxPage(page);
+        const dashboardPage =new DashboardPage(page);
+        await loginPage.goto();
+        await loginPage.loggedUserFr('loki', 'Qwerty1!');
+        await expect(loginPage.dashboardHeaderFr).toBeVisible({ timeout: 100000 });
+        await page.mouse.move(10,5);
+        await dashboardPage.viewAllMessagesButtonFr.click();
+        await expect(inboxPage.inboxHeaderFr).toBeVisible(); 
+    });
+
+    test('check editing a target amount', async ({ page }) => {
+        test.setTimeout(150000);
+        const loginPage = new LoginPage(page);
+        const inboxPage = new InboxPage(page);
+        const dashboardPage = new DashboardPage(page);
+        const goalsPage = new GoalsPage(page);
+        await loginPage.goto();
+        await loginPage.loggedUser('loki', 'Qwerty1!');
+        await expect(loginPage.dashboardHeader).toBeVisible({ timeout: 100000 });
+        await dashboardPage.setYorGoalsButton.click();
+        await goalsPage.viewDetailsGoal.click();
+        await expect(goalsPage.associatedAccount).toBeVisible();
+        await goalsPage.hideDetailsGoal.click();
+        await expect(goalsPage.associatedAccount).toBeHidden();
+    });
 });
+
