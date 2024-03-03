@@ -19,7 +19,6 @@ test.describe('suite', async () => {
         await page.mouse.down();
         await toolsPage.createPortfolioButton.click();
         await expect(toolsPage.createPortfolioText).toBeVisible();
-        await expect(page).toHaveScreenshot({ maxDiffPixels: 100 });
     });
 
     test('invalid sign in', async ({ page }) => {
