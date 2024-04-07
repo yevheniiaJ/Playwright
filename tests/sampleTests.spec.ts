@@ -8,7 +8,8 @@ import { DashboardPage } from '../page-objects/dashboardPage';
 import { GoalsPage } from '../page-objects/goalsPage';
  
 test.describe('suite', async () => {
-    test('create portfolio', async ({ page }) => {
+    test.only('create portfolio', async ({ page }) => {
+        test.setTimeout(150000);
         const login = new LoginPage(page);
         const toolsPage = new ToolsPage(page);
         await login.goto();

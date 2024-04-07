@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "runTests": "npx playwright test restApi.spec.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.41.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
